@@ -9,7 +9,8 @@ WORKDIR /opt/services/consumer/src
 RUN pip install -r requirements.txt
 COPY . /opt/services/consumer/src
 EXPOSE 5090
-#ENTRYPOINT ["gunicorn", "--config=gunicorn_config.py", "wsgi:app"]
-CMD ["python", "consumer.py"]
+#CMD ["python", "consumer.py"]
+ENTRYPOINT ["gunicorn", "--config=gunicorn_config.py", "wsgi:app"]
+
 
 
