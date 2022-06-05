@@ -1,0 +1,8 @@
+flask
+Flask-Caching
+requests
+flask-sqlalchemy
+flask-apscheduler
+pandas
+gunicorn
+pytest
