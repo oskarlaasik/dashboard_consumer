@@ -1,4 +1,3 @@
-import os
 import pytest
 
 from src import db
@@ -19,6 +18,7 @@ def app():
     with app.app_context():
         db.session.remove()
         db.drop_all()
+
 
 @pytest.fixture()
 def client(app):

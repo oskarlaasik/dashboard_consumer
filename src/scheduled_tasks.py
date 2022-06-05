@@ -33,7 +33,6 @@ def get_records_scheduled():
                 db.session.commit()
 
 
-
 # Execute this task every 10 seconds
 @scheduler.task('interval', id='post_statistics', seconds=10, max_instances=2)
 def post_statistics_scheduled():

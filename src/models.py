@@ -28,4 +28,3 @@ class Answer(db.Model):
         limit = now - datetime.timedelta(minutes=1)
         Answer.query.filter(limit > Answer.created).delete()
         db.session.commit()
-
