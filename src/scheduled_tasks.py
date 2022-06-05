@@ -34,7 +34,7 @@ def get_records_scheduled():
 
 
 # Execute this task every 10 seconds
-@scheduler.task('interval', id='post_statistics', seconds=10, max_instances=2)
+@scheduler.task('interval', id='post_statistics', seconds=10, max_instances=1)
 def post_statistics_scheduled():
     now = datetime.datetime.now()
     limit = now - datetime.timedelta(minutes=1)
