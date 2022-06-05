@@ -7,7 +7,7 @@ from src import init_app
 
 @pytest.fixture()
 def app():
-    app = init_app()
+    app = init_app(test=True)
 
     db.init_app(app)  # initialise the database for the app
     with app.app_context():

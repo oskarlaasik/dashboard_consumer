@@ -19,6 +19,13 @@ class Answer(db.Model):
         self.created = now
 
     # Not a static function because we always insert in bulk
-    def create(self, id, client_timestamp, user_uuid, correctness):  # create new Answer
+    def create(id, client_timestamp, user_uuid, correctness):  # create new Answer
         new_answer = Answer(id, client_timestamp, user_uuid, correctness, datetime.datetime.now())
         return new_answer
+
+    @staticmethod
+    def delete_older_than_one_minute(now):  # include now for testing
+        limit = now - datetime.timedelta(minutes=1)
+        Answer.query.filter(limit > Answer.created).delete()
+        db.session.commit()
+

@@ -6,15 +6,21 @@ import requests
 
 def get_token():
     response = requests.get('http://test-task.lingvist.io:3000/api/subscribe')
-    content = response.content.decode("utf-8")
-    token = json.loads(content)['token']
-    return token
+    if response.status_code == 200:
+        return json.loads(response.content)['token']
+    else:
+        return None
 
 
 def get_records(token):
     response = requests.get(f'http://test-task.lingvist.io:3000/api/answers/{token}')
-    records = json.loads(response.content)
-    return records
+    if response.status_code == 200:
+        records = json.loads(response.content)
+        return records
+    elif response.text == 'invalid token' or response.text == 'token expired':
+        return 'invalid token'
+    else:
+        return None
 
 
 def post_statistics(num_users, num_answers, avg_correctness, correctness_stddev):
@@ -28,5 +34,4 @@ def post_statistics(num_users, num_answers, avg_correctness, correctness_stddev)
             "correctness_stddev": correctness_stddev
         }
     }
-    response = requests.post('http://test-task.lingvist.io:3000/api/dashboard', json=payload)
-    return response
+    requests.post('http://test-task.lingvist.io:3000/api/dashboard', json=payload)

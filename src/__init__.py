@@ -13,7 +13,7 @@ cache = Cache(config={'CACHE_TYPE': 'SimpleCache'})
 scheduler = APScheduler()
 
 
-def init_app():
+def init_app(test=False):
     """Create Flask application."""
     app = Flask(__name__, instance_relative_config=False)
     app.config.from_object(Config)
@@ -24,14 +24,11 @@ def init_app():
     app.config.from_object(Config)
     from src.models import Answer
     db.init_app(app)  # initialise the database for the app
-    from src.scheduled_tasks import get_records_scheduled, post_statistics_scheduled
-    scheduler.init_app(app)  # initialize scheduler
-    scheduler.start()
     with app.app_context():
         db.create_all()
+    if not test:
+        from src.scheduled_tasks import get_records_scheduled, post_statistics_scheduled
+        scheduler.init_app(app)  # initialize scheduler
+        scheduler.start()
 
-    with app.app_context():
-        from src.api import api_bp
-        app.register_blueprint(api_bp)
-
-        return app
+    return app
