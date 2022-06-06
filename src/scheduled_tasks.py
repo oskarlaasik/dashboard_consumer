@@ -14,23 +14,21 @@ from src.statistics import calculate_statistics
 def get_records_scheduled():
     while not cache.get('continuation_token'):
         continuation_token = get_token()
+        # returns None if schema validation fails
         cache.set('continuation_token', continuation_token)
         # Answers api sends an empty array when call
         # is made less than 1 second after asking for token
         time.sleep(1)
-    response = get_records(cache.get('continuation_token'))
-    if response == 'invalid_token':
-        cache.set('continuation_token', None)
-    elif response:
-        if 'token' in response:
-            cache.set('continuation_token', response['token'])
-        if 'answers' in response and response['answers']:
-            answers = []
-            for answer in response['answers']:
-                answers.append(Answer.create(**answer))
-            with scheduler.app.app_context():
-                db.session.bulk_save_objects(answers)
-                db.session.commit()
+    # returns None for either if schema validation fails
+    records, token = get_records(cache.get('continuation_token'))
+    cache.set('continuation_token', token)
+    if records:
+        answers = []
+        for answer in records['answers']:
+            answers.append(Answer.create(**answer))
+        with scheduler.app.app_context():
+            db.session.bulk_save_objects(answers)
+            db.session.commit()
 
 
 # Execute this task every 10 seconds

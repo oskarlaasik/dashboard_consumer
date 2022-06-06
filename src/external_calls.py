@@ -14,13 +14,15 @@ def get_token():
 
 def get_records(token):
     response = requests.get(f'http://test-task.lingvist.io:3000/api/answers/{token}')
+    records = None
+    token = None
     if response.status_code == 200:
-        records = json.loads(response.content)
-        return records
-    elif response.text == 'invalid token' or response.text == 'token expired':
-        return 'invalid token'
-    else:
-        return None
+        content = json.loads(response.content)
+        if 'answers' in content and content['answers']:
+            answers = content['answers']
+        if 'token' in content:
+            token = content['token']
+    return records, token
 
 
 def post_statistics(num_users, num_answers, avg_correctness, correctness_stddev):
