@@ -17,7 +17,7 @@ def get_records_scheduled():
         # returns None if schema validation fails
         cache.set('continuation_token', continuation_token)
         # Answers api sends an empty array when call
-        # is made less than 1 second after asking for token
+        # is made immediately after asking token
         time.sleep(1)
     # returns None for either if schema validation fails
     records, token = get_records(cache.get('continuation_token'))
