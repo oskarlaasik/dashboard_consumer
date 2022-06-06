@@ -19,7 +19,7 @@ def get_records(token):
     if response.status_code == 200:
         content = json.loads(response.content)
         if 'answers' in content and content['answers']:
-            answers = content['answers']
+            records = content['answers']
         if 'token' in content:
             token = content['token']
     return records, token
