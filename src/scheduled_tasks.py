@@ -24,7 +24,7 @@ def get_records_scheduled():
     cache.set('continuation_token', token)
     if records:
         answers = []
-        for answer in records['answers']:
+        for answer in records:
             answers.append(Answer.create(**answer))
         with scheduler.app.app_context():
             db.session.bulk_save_objects(answers)
